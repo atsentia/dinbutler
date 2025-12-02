@@ -5,7 +5,9 @@
 > *"Din" means "Your" in Norwegian, pronounced "Dean"*
 
 ```bash
-pip install dinbutler && python -c "from dinbutler import Sandbox; print(Sandbox.create().commands.run('echo Hello from DinButler').stdout)"
+pip install dinbutler && \
+  python -c "from dinbutler import Sandbox; \
+    print(Sandbox.create().commands.run('echo Hello').stdout)"
 ```
 
 ```python
