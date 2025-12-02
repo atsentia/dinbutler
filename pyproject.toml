@@ -41,12 +41,29 @@ dev = [
     "ruff>=0.2.0",
     "mypy>=1.8.0",
 ]
+cli = [
+    "click>=8.1.0",
+    "rich>=13.0.0",
+]
+mcp = [
+    "mcp>=1.0.0",
+]
+workflows = [
+    "anthropic>=0.39.0",
+    "click>=8.1.0",
+    "rich>=13.0.0",
+]
+all = [
+    "dinbutler[cli,mcp,workflows]",
+]
 
 [project.scripts]
 dinbutler = "dinbutler.cli:main"
+sbx = "apps.sandbox_cli.main:cli"
+obox = "apps.sandbox_workflows.main:cli"
 
 [tool.hatch.build.targets.wheel]
-packages = ["dinbutler"]
+packages = ["dinbutler", "apps"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

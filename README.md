@@ -14,6 +14,56 @@ DinButler provides isolated sandbox environments for AI agents to safely execute
 - **Fast** - No network latency, instant sandbox creation
 - **Offline Ready** - Works without internet connection
 
+## Claude Code Integration
+
+DinButler includes full Claude Code integration via MCP (Model Context Protocol), similar to [agent-sandboxes](https://github.com/disler/agent-sandboxes) but running locally.
+
+### Quick Setup
+
+```bash
+# Install with MCP support
+pip install "dinbutler[all]"
+
+# Copy MCP config to Claude Code
+cp .mcp.json.sample ~/.claude/mcp.json
+# Edit the cwd path in mcp.json to point to your dinbutler installation
+```
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| **MCP Server** | 19 tools for sandbox control from Claude |
+| **CLI (`sbx`)** | Full sandbox management from terminal |
+| **Parallel Forks (`obox`)** | Run multiple Claude agents experimenting in parallel |
+| **Slash Commands** | `/prime`, `/prime_sandbox`, `/prime_obox` |
+
+### Example: Claude in "YOLO Mode"
+
+Once configured, Claude can safely execute any code in isolated containers:
+
+```
+You: Create a sandbox and run some Python code
+
+Claude: [Uses init_sandbox tool]
+        [Uses write_file to create script.py]
+        [Uses execute_command: python script.py]
+        [Uses kill_sandbox when done]
+```
+
+The container auto-destroys after timeout - your system stays safe.
+
+### Parallel Agent Experiments
+
+```bash
+# Run 5 Claude agents trying different approaches
+obox https://github.com/user/repo \
+  --forks 5 \
+  --prompt "Refactor the auth module"
+```
+
+📖 **Full Documentation**: See [docs/plans/claude-code-integration.md](docs/plans/claude-code-integration.md)
+
 ## Use Cases
 
 ### MCP (Model Context Protocol) Servers

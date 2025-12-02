@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "dinbutler": {
+      "command": "python",
+      "args": ["-m", "apps.sandbox_mcp.server"],
+      "cwd": "/path/to/dinbutler",
+      "env": {}
+    }
+  }
+}
