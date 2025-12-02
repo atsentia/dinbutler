@@ -107,10 +107,12 @@ def list_sandboxes():
         print("No sandboxes running")
         return
 
-    print(f"{'SANDBOX ID':<30} {'TEMPLATE':<15} {'STATE':<10}")
-    print("-" * 55)
+    print(f"{'SANDBOX ID':<26} {'TEMPLATE':<10} {'STATE':<8} {'STARTED':<17} {'TIMEOUT':<17}")
+    print("-" * 80)
     for s in sandboxes:
-        print(f"{s.sandbox_id:<30} {s.template_id:<15} {s.state.value:<10}")
+        started = s.started_at.strftime("%Y%m%d %H:%M:%S") if s.started_at else "-"
+        timeout = s.end_at.strftime("%Y%m%d %H:%M:%S") if s.end_at else "-"
+        print(f"{s.sandbox_id:<26} {s.template_id:<10} {s.state.value:<8} {started:<17} {timeout:<17}")
 
 
 if __name__ == "__main__":

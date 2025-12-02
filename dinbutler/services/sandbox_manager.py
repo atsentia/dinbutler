@@ -56,6 +56,7 @@ class SandboxManager:
         self,
         sandbox_id: str,
         template: str,
+        timeout: int = 300,
         metadata: Optional[Dict[str, str]] = None,
     ) -> Dict[str, str]:
         """Create container labels for sandbox tracking."""
@@ -63,6 +64,7 @@ class SandboxManager:
             f"{LABEL_PREFIX}.sandbox_id": sandbox_id,
             f"{LABEL_PREFIX}.template": template,
             f"{LABEL_PREFIX}.created_at": datetime.utcnow().isoformat(),
+            f"{LABEL_PREFIX}.timeout": str(timeout),
         }
         if metadata:
             for key, value in metadata.items():
@@ -96,6 +98,14 @@ class SandboxManager:
             labels.get("created_at", datetime.utcnow().isoformat())
         )
 
+        # Parse timeout and compute end_at
+        timeout_str = labels.get("timeout", "300")
+        try:
+            timeout = int(timeout_str)
+        except ValueError:
+            timeout = 300
+        end_at = created_at + timedelta(seconds=timeout) if timeout > 0 else None
+
         # Extract metadata
         metadata = {}
         for key, value in labels.items():
@@ -115,6 +125,7 @@ class SandboxManager:
             template_id=labels.get("template", "default"),
             state=state,
             started_at=created_at,
+            end_at=end_at,
             metadata=metadata,
             envs=envs,
         )
@@ -166,7 +177,7 @@ class SandboxManager:
         sandbox_id = self._generate_sandbox_id()
         container_name = self._get_container_name(sandbox_id)
         image = self._get_image_for_template(template)
-        labels = self._make_labels(sandbox_id, template, metadata)
+        labels = self._make_labels(sandbox_id, template, timeout, metadata)
 
         logger.info(f"Creating sandbox {sandbox_id} with template {template}")
 
