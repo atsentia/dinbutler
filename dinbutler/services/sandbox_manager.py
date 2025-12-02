@@ -24,6 +24,8 @@ class SandboxManager:
         "default": "dinbutler-default:latest",
         "python": "dinbutler-python:latest",
         "node": "dinbutler-node:latest",
+        "gemini": "dinbutler-gemini:latest",
+        "cursor": "dinbutler-cursor:latest",
     }
 
     def __init__(self, docker_client: Optional[DockerClient] = None):

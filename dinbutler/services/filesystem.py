@@ -186,19 +186,7 @@ class FilesystemService:
                 user=user,
             )
 
-            # Write using heredoc via exec
-            content = data if isinstance(data, str) else data.decode("utf-8")
-            # Escape single quotes for shell
-            escaped = content.replace("'", "'\"'\"'")
-
-            result = self._docker.exec_run(
-                container_name,
-                f"sh -c 'cat > {path}' ",
-                stdin=True,
-                user=user,
-            )
-
-            # Alternative: use echo with base64 for binary safety
+            # Write using base64 encoding for binary safety
             import base64
             b64_content = base64.b64encode(
                 data.encode() if isinstance(data, str) else data

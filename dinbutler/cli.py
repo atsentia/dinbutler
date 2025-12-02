@@ -68,7 +68,7 @@ def build_templates(args):
     if not os.path.exists(templates_dir):
         templates_dir = "templates"
 
-    templates = ["default", "python", "node"]
+    templates = ["default", "python", "node", "gemini"]
     if args.template:
         templates = [args.template]
 

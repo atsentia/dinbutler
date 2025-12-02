@@ -21,10 +21,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-# Create non-root user (node image has user node, but we create 'user' for consistency)
-RUN useradd -m -s /bin/bash -u 1000 user \
-    && mkdir -p /home/user/workspace \
-    && chown -R user:user /home/user
+# Create non-root user
+RUN useradd -m -s /bin/bash -u 1001 coder \
+    && mkdir -p /home/coder/workspace \
+    && chown -R coder:coder /home/coder
 
 # Create directory for PID tracking
 RUN mkdir -p /tmp/pids && chmod 777 /tmp/pids
@@ -34,11 +34,11 @@ RUN echo '#!/bin/bash\necho "$$" > /tmp/pids/$1\nexec "${@:2}"' > /usr/local/bin
     && chmod +x /usr/local/bin/run-tracked
 
 # Switch to user
-USER user
-WORKDIR /home/user
+USER coder
+WORKDIR /home/coder
 
 # Install global npm packages as user
-RUN npm config set prefix '/home/user/.npm-global' \
+RUN npm config set prefix '/home/coder/.npm-global' \
     && npm install -g \
     typescript \
     ts-node \
@@ -47,11 +47,11 @@ RUN npm config set prefix '/home/user/.npm-global' \
     nodemon
 
 # Set working directory
-WORKDIR /home/user/workspace
+WORKDIR /home/coder/workspace
 
 # Environment
-ENV HOME=/home/user
-ENV PATH=/home/user/.npm-global/bin:/home/user/.local/bin:$PATH
+ENV HOME=/home/coder
+ENV PATH=/home/coder/.npm-global/bin:/home/coder/.local/bin:$PATH
 ENV NODE_ENV=development
 ENV TERM=xterm-256color
 
