@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dinbutler"
+version = "0.1.0"
+description = "Your Butler for AI sandboxes - E2B-compatible local sandbox using Docker"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    { name = "Developer" }
+]
+keywords = ["e2b", "sandbox", "docker", "ai", "code-execution", "agent", "butler"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "docker>=7.0.0",
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "websockets>=12.0",
+    "pydantic>=2.0.0",
+    "httpx>=0.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "black>=24.0.0",
+    "ruff>=0.2.0",
+    "mypy>=1.8.0",
+]
+
+[project.scripts]
+dinbutler = "dinbutler.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["dinbutler"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "asyncio: mark test as an async test",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py39"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
