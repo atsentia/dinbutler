@@ -64,7 +64,7 @@ class Sandbox:
         cls,
         *,
         template: str | None = None,
-        timeout: int = 300,
+        timeout: int = 300,  # noqa: ARG003  # Reserved for E2B compatibility
         envs: dict[str, str] | None = None,
         cwd: str = "/home/user",
     ) -> Self:
@@ -72,7 +72,7 @@ class Sandbox:
 
         Args:
             template: Docker image to use (default: python:3.12-slim)
-            timeout: Container timeout in seconds
+            timeout: Container lifetime in seconds (reserved for future use)
             envs: Environment variables to set in the container
             cwd: Working directory in the container
 
@@ -139,7 +139,7 @@ class Sandbox:
         on_stdout: Callable[[str], None] | None = None,
         on_stderr: Callable[[str], None] | None = None,
         envs: dict[str, str] | None = None,
-        timeout: int | None = None,
+        timeout: int | None = None,  # noqa: ARG002  # Reserved for E2B compatibility
         cwd: str | None = None,
     ) -> Execution:
         """Execute code in the sandbox.
@@ -150,7 +150,7 @@ class Sandbox:
             on_stdout: Callback for stdout output
             on_stderr: Callback for stderr output
             envs: Additional environment variables
-            timeout: Execution timeout in seconds
+            timeout: Execution timeout in seconds (reserved for future use)
             cwd: Working directory for execution
 
         Returns:

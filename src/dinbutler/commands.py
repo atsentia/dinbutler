@@ -38,7 +38,7 @@ class SandboxCommands:
         *,
         cwd: str | None = None,
         envs: dict[str, str] | None = None,
-        timeout: int | None = None,
+        timeout: int | None = None,  # noqa: ARG002  # Reserved for E2B compatibility
         on_stdout: Callable[[str], None] | None = None,
         on_stderr: Callable[[str], None] | None = None,
     ) -> CommandResult:
@@ -48,7 +48,7 @@ class SandboxCommands:
             command: Command to run (string or list of args)
             cwd: Working directory for the command
             envs: Environment variables to set
-            timeout: Timeout in seconds
+            timeout: Timeout in seconds (reserved for future use)
             on_stdout: Callback for stdout output
             on_stderr: Callback for stderr output
 

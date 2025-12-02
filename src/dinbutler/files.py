@@ -1,6 +1,8 @@
 """File system operations for sandbox environments."""
 
+import tarfile
 from dataclasses import dataclass
+from io import BytesIO
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -37,10 +39,6 @@ class SandboxFiles:
         if isinstance(content, str):
             content = content.encode("utf-8")
 
-        # Use docker exec with cat to write file
-        import tarfile
-        from io import BytesIO
-
         # Create a tar archive with the file
         tar_stream = BytesIO()
         with tarfile.open(fileobj=tar_stream, mode="w") as tar:
@@ -64,9 +62,6 @@ class SandboxFiles:
         container = self._sandbox._get_container()
         if container is None:
             raise RuntimeError("Sandbox container is not running")
-
-        import tarfile
-        from io import BytesIO
 
         bits, _ = container.get_archive(path)
         tar_stream = BytesIO()
