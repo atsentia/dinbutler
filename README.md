@@ -4,6 +4,18 @@
 
 > *"Din" means "Your" in Norwegian, pronounced "Dean"*
 
+```bash
+pip install dinbutler && python -c "from dinbutler import Sandbox; print(Sandbox.create().commands.run('echo Hello from DinButler').stdout)"
+```
+
+```python
+from dinbutler import Sandbox
+
+with Sandbox.create() as sandbox:
+    result = sandbox.commands.run("echo Hello from DinButler!")
+    print(result.stdout)  # Hello from DinButler!
+```
+
 DinButler provides isolated sandbox environments for AI agents to safely execute code, manipulate files, and run commands - all locally on your machine with zero cloud costs.
 
 ## Why DinButler?
