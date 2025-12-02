@@ -4,18 +4,67 @@
 
 > *"Din" means "Your" in Norwegian, pronounced "Dean"*
 
+### Try it now
 ```bash
 pip install dinbutler && \
   python -c "from dinbutler import Sandbox; \
     print(Sandbox.create().commands.run('echo Hello').stdout)"
 ```
 
+### Run commands in isolation
 ```python
 from dinbutler import Sandbox
 
 with Sandbox.create() as sandbox:
     result = sandbox.commands.run("echo Hello from DinButler!")
     print(result.stdout)  # Hello from DinButler!
+```
+
+### Install packages and run scripts
+```python
+from dinbutler import Sandbox
+
+with Sandbox.create(template="python") as sandbox:
+    sandbox.commands.run("pip install -q requests cowsay")
+    sandbox.files.write("/tmp/demo.py", """
+import requests, cowsay
+ip = requests.get("https://httpbin.org/ip").json()["origin"]
+cowsay.cow(f"Your IP: {ip}")
+""")
+    print(sandbox.commands.run("python /tmp/demo.py").stdout)
+```
+
+### Build MCP tools in a sandbox
+```python
+from dinbutler import Sandbox
+
+with Sandbox.create(template="python") as sandbox:
+    sandbox.commands.run("pip install -q mcp")
+    sandbox.files.write("/tmp/mcp_calc.py", """
+from mcp.server import Server
+from mcp.types import Tool, TextContent
+import asyncio
+
+app = Server("calculator")
+
+@app.list_tools()
+async def list_tools():
+    return [Tool(name="add", description="Add two numbers",
+        inputSchema={"type":"object","properties":{"a":{"type":"number"},"b":{"type":"number"}}})]
+
+@app.call_tool()
+async def call_tool(name, arguments):
+    return [TextContent(type="text", text=str(arguments["a"] + arguments["b"]))]
+
+async def test():
+    tools = await list_tools()
+    print(f"Tools: {[t.name for t in tools]}")
+    result = await call_tool("add", {"a": 40, "b": 2})
+    print(f"40 + 2 = {result[0].text}")
+
+asyncio.run(test())
+""")
+    print(sandbox.commands.run("python /tmp/mcp_calc.py").stdout)
 ```
 
 DinButler provides isolated sandbox environments for AI agents to safely execute code, manipulate files, and run commands - all locally on your machine with zero cloud costs.
